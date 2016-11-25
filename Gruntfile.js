@@ -20,6 +20,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-typings');
 
-  grunt.registerTask('heroku:development', ['typings:install', 'ts', 'sass']);
-  grunt.registerTask('heroku:production', ['typings:install', 'ts', 'sass']);
+  grunt.registerTask('default', ['typings:install', 'ts', 'sass']);
 };
