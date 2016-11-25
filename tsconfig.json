@@ -3,7 +3,7 @@
     "target": "es3",
     "noImplicitAny": true,
     "removeComments": true,
-    "outFile": "js/compiled.js",
+    "outFile": "public/js/compiled.js",
     "sourceMap": true
   },
   "exclude": [

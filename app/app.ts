@@ -5,17 +5,18 @@ angular.module('notb', ['ngMaterial', 'ngRoute', 'notb.index',
     $locationProvider.html5Mode(true);
     $routeProvider
       .when('/', {
-        templateUrl: 'app/index/index.html',
+        // The templates directory is under public.
+        templateUrl: 'templates/index.html',
         controller: 'IndexCtrl',
         controllerAs: 'ctrl',
       })
       .when('/vote', {
-        templateUrl: 'app/vote/vote.html',
+        templateUrl: 'templates/vote.html',
         controller: 'VoteCtrl',
         controllerAs: 'ctrl',
       })
       .when('/admin', {
-        templateUrl: 'app/admin/admin.html',
+        templateUrl: 'templates/admin.html',
         controller: 'AdminCtrl',
         controllerAs: 'ctrl',
       })      

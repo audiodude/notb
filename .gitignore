@@ -1,8 +1,9 @@
-bower_components/
 node_modules/
 typings/
 .sass-cache/
 .tscache/
-css/style.css
-css/style.css.map
-js/compiled.js
+public/bower_components/
+public/css/compiled.css
+public/css/compiled.css.map
+public/js/compiled.js
+public/js/compiled.js.map
