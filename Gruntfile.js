@@ -16,6 +16,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks('grunt-contrib-sass');
 
-  grunt.registerTask('heroku:development', 'ts sass');
-  grunt.registerTask('heroku:production', 'ts sass');
+  grunt.registerTask('heroku:development', ['ts', 'sass']);
+  grunt.registerTask('heroku:production', ['ts', 'sass']);
 };
