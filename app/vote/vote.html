@@ -1,0 +1,26 @@
+<div class="vote-cont" layout="column" layout-align="start center">
+  <md-toolbar class="md-hue-2" flex="5">
+    <div class="md-toolbar-tools">
+      <h2>
+        <span>Vote for Band Names</span>
+      </h2>
+    </div>
+  </md-toolbar>
+  <md-content layout-padding flex="80">
+    <h3>You can select up to {{ctrl.maxSelections}}</h3>
+    <div class="item-cont" layout="row" layout-wrap layout-padding>
+      <div class="item" ng-class="{'selected': ctrl.isSelected(item)}"
+           ng-click="ctrl.toggleSelection(item)"
+           ng-repeat="item in ctrl.items">
+        {{item.name}}
+      </div>
+    </div>
+  </md-content>
+  <div flex>
+    <span class="notify"
+          ng-class="{'full': ctrl.selections.length == ctrl.maxSelections}">
+      {{ctrl.selections.length}} / {{ctrl.maxSelections}} selected
+    </span>
+    <md-button class="md-primary">Vote</md-button>
+  </div>
+</div>

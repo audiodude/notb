@@ -1,0 +1,50 @@
+html,
+body {
+  height: 100%;
+}
+
+.banner-cont h1 {
+  font-weight: normal;
+  text-align: center;
+}
+
+.g-signin2 {
+  margin: auto;
+}
+
+.vote-cont,
+.vote-cont md-toolbar {
+  border-left: 2px solid #e4e4e4;
+  border-right: 2px solid #e4e4e4;
+}
+
+.vote-cont {
+  height: 100%;
+  margin: auto;
+  min-height: 100%;
+  max-width: 640px !important;
+}
+
+.item {
+  border: 2px solid #e4e4e4;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 0 8px 4px;
+  padding: 4px;
+}
+
+.item:focus {
+  outline: none;
+}
+
+.item.selected {
+  border-color: lightgreen;
+}
+
+.notify {
+  font-size: 20px;
+}
+
+.notify.full {
+  font-weight: bold;
+}

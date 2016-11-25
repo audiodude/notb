@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es3",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "out": "js/compiled.js",
+    "sourceMap": true
+  },
+  "exclude": [
+    "bower_components",
+    "node_modules"
+  ]
+}

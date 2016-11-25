@@ -1,0 +1,20 @@
+{
+  "name": "notb",
+  "version": "0.1.0",
+  "description": "The Name Of This Band Is, an app for voting on band names",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "bands",
+    "music",
+    "voting"
+  ],
+  "author": "Travis Briggs <audiodude@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
