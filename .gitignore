@@ -2,7 +2,7 @@ node_modules/
 typings/
 .sass-cache/
 .tscache/
-public/bower_components/
+public/dist/
 public/css/compiled.css
 public/css/compiled.css.map
 public/js/compiled.js
