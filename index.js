@@ -1,19 +1,23 @@
 var express = require('express')
 var app = express()
+var bodyParser = require('body-parser')
 var request = require('request');
 
-var PORT = process.env.PORT || 8080;
+var PORT = process.env.PORT || 3000;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true})); 
 app.use(express.static('public'))
 
 app.post('/api/users/is_admin', function(req, res) {
   var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + 
-      req.params.idToken
+      req.body.idToken
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
-      var ans = {'isAdmin': data['sub'] == process.env.ADMIN_GOOGLE_ID}
-      res.json(ans)
+      var ans = {'isAdmin': data['sub'] + '' == process.env.ADMIN_GOOGLE_ID}
+      res.json(ans);
+      return;
     }
     res.json({'isAdmin': false});
   });
@@ -57,7 +61,7 @@ app.get('/api/items', function(req, res) {
 });
 
 app.all("/*", function(req, res, next) {
-  res.sendfile("index.html", { root: "public" });
+  res.sendFile("index.html", { root: "public" });
 });
 
 app.listen(PORT, function () {
