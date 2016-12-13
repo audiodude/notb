@@ -5,7 +5,8 @@
     "removeComments": true,
     "outFile": "public/js/compiled.js",
     "sourceMap": true,
-    "typeRoots": ["./typings"]
+    "typeRoots": ["./typings"],
+    "types": []
   },
   "exclude": [
     "bower_components",
