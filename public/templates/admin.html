@@ -1,3 +1,12 @@
-<div ng-show="ctrl.isAdmin">
-  <h1>Admin page</h1>
+<div class="vote-cont" ng-show="ctrl.isAdmin" layout="column" layout-align="start center">
+  <md-toolbar class="md-hue-2" flex="5">
+    <div class="md-toolbar-tools">
+      <h2>
+        <span>Voting Admin</span>
+      </h2>
+    </div>
+  </md-toolbar>
+  <div class="admin-items-cont" layout-padding layout="row" flex>
+    <textarea flex="80">{{ ctrl.getLineItems() }}</textarea>
+  </div>
 </div>

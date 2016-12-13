@@ -12,12 +12,19 @@ class AdminCtrl {
     this.AdminService.checkForAdmin().then((isAdmin: boolean) => {
       this.isAdmin = isAdmin;
       if (!this.isAdmin) {
-        this.IndexService.redirectUserByRole();
+        this.AdminService.redirectUserByRole();
       }
     });
     this.VoteService.getItems().then((items: Array<Item>) => {
       this.items = items;
     });
+  }
+
+  getLineItems() {
+    var names = this.items.map(function(item) {
+      return item.name;
+    });
+    return names.join('\n');
   }
 }
 
@@ -25,6 +32,7 @@ class AdminService {
   private authPromise: ng.IPromise<null>;
 
   constructor(private $http: ng.IHttpService,
+              private $location: ng.ILocationService,
               private $q: ng.IQService) {
     var deferred = $q.defer();
     gapi.load('auth2', () => {
@@ -48,6 +56,16 @@ class AdminService {
       })
     }).then((httpResp: any) => {
       return <boolean>httpResp.data.isAdmin;
+    });
+  }
+
+  redirectUserByRole() {
+    this.checkForAdmin().then((isAdmin: boolean) => {
+      if (isAdmin) {
+        this.$location.url('/admin');
+      } else {
+        this.$location.url('/vote');
+      }
     });
   }
 }
