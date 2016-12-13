@@ -7,9 +7,13 @@ class AdminCtrl {
 
   constructor(private $location: ng.ILocationService,
               private VoteService: VoteService,
+              private IndexService: IndexService,
               private AdminService: AdminService) {
     this.AdminService.checkForAdmin().then((isAdmin: boolean) => {
       this.isAdmin = isAdmin;
+      if (!this.isAdmin) {
+        this.IndexService.redirectUserByRole();
+      }
     });
     this.VoteService.getItems().then((items: Array<Item>) => {
       this.items = items;
@@ -31,9 +35,7 @@ class AdminService {
         scope: 'profile'
       });
       auth2.then(() => {
-        window.console.log('immediate response:',
-                           auth2.currentUser.get().getAuthResponse());
-        deferred.resolve(true);
+        deferred.resolve(auth2.currentUser.get().getAuthResponse());
       });
     });
     this.authPromise = deferred.promise;
@@ -41,7 +43,6 @@ class AdminService {
 
   checkForAdmin() {
     return this.authPromise.then((authResponse: any) => {
-      window.console.log(authResponse);
       return this.$http.post('/api/users/is_admin', {
         'idToken': authResponse.id_token
       })
