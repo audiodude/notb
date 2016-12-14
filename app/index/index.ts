@@ -2,6 +2,7 @@ var gapi: any;
 
 class IndexCtrl {
   constructor(private $location: ng.ILocationService,
+              private $rootScope: $rootScopeService,
               private AdminService: AdminService,
               private IndexService: IndexService) {
     gapi.signin2.render('g-signin', {
@@ -13,7 +14,9 @@ class IndexCtrl {
   }
 
   onSignIn(googleUser: any) {
-    this.$location.url('/vote');
+    this.$rootScope.$apply(() => {
+      this.$location.path('/vote');
+    })
   }
 }
 

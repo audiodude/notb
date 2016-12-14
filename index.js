@@ -9,6 +9,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(express.static('public'))
 
+if (process.env.NODE_ENV != 'production') {
+  // Serve original ts files in non-production.
+  app.use(express.static('.'));
+}
+
 app.post('/api/users/is_admin', function(req, res) {
   var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + 
       req.body.idToken

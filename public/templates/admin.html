@@ -6,7 +6,16 @@
       </h2>
     </div>
   </md-toolbar>
-  <div class="admin-items-cont" layout-padding layout="row" flex>
-    <textarea flex="80">{{ ctrl.getLineItems() }}</textarea>
+  <div layout="column" layout-fill>
+    <div class="admin-items-cont" layout="row" layout-align="center stretch"
+         layout-padding flex="90">
+      <textarea flex="80">{{ ctrl.getLineItems() }}</textarea>
+    </div>
+    <div layout="row" layout-align="end center">
+      <md-button class="md-primary md-raised" flex flex-offset="70">
+        Save
+      </md-button>
+      <div flex="10"></div>
+    </div>
   </div>
 </div>

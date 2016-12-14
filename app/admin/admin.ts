@@ -62,9 +62,9 @@ class AdminService {
   redirectUserByRole() {
     this.checkForAdmin().then((isAdmin: boolean) => {
       if (isAdmin) {
-        this.$location.url('/admin');
+        this.$location.path('/admin');
       } else {
-        this.$location.url('/vote');
+        this.$location.path('/vote');
       }
     });
   }
