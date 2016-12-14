@@ -2,7 +2,7 @@ var gapi: any;
 
 class IndexCtrl {
   constructor(private $location: ng.ILocationService,
-              private $rootScope: $rootScopeService,
+              private $rootScope: ng.IRootScopeService,
               private AdminService: AdminService,
               private IndexService: IndexService) {
     gapi.signin2.render('g-signin', {

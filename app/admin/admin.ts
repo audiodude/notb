@@ -3,7 +3,9 @@ var gapi: any;
 class AdminCtrl {
   isAdmin: boolean = false;
   idToken: string = '';
-  items: Array<any> = [];
+  items: Array<Item> = [];
+  editItems: string = '';
+  saveSuccess: boolean = null;
 
   constructor(private $location: ng.ILocationService,
               private VoteService: VoteService,
@@ -16,15 +18,21 @@ class AdminCtrl {
       }
     });
     this.VoteService.getItems().then((items: Array<Item>) => {
-      this.items = items;
+      this.editItems = this.getLineItems(items);
     });
   }
 
-  getLineItems() {
-    var names = this.items.map(function(item) {
+  getLineItems(items: Array<Item>): string {
+    var names = items.map(function(item: Item) {
       return item.name;
     });
     return names.join('\n');
+  }
+
+  submitItems() {
+    this.AdminService.updateItems(this.editItems).then((result: boolean) => {
+      this.saveSuccess = result;
+    })
   }
 }
 
@@ -66,6 +74,16 @@ class AdminService {
       } else {
         this.$location.path('/vote');
       }
+    });
+  }
+
+  updateItems(items: string) {
+    return this.$http.post('/api/items/all', {
+      'items': items
+    }).then(() => {
+      return true;
+    }, () => {
+      return false;
     });
   }
 }

@@ -3,7 +3,18 @@ var app = express()
 var bodyParser = require('body-parser')
 var request = require('request');
 
+var redis = require("redis");
+
 var PORT = process.env.PORT || 3000;
+
+if (process.env.REDIS_URL) {
+  client = redis.createClient(process.env.REDIS_URL);
+} else {
+  client = redis.createClient();
+}
+client.on("error", function (err) {
+  console.log("Error " + err);
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); 
@@ -65,10 +76,16 @@ app.get('/api/items', function(req, res) {
   });
 });
 
-app.all("/*", function(req, res, next) {
-  res.sendFile("index.html", { root: "public" });
+app.post('/api/items/all', function(req, res) {
+  var parts = req.body.items.split('\n');
+  console.log(parts);
+  res.status(204).send();
+});
+
+app.all('/*', function(req, res, next) {
+  res.sendFile('index.html', { root: 'public' });
 });
 
 app.listen(PORT, function () {
-  console.log('Example app listening on port ' + PORT)
+  console.log('NOTB app listening on port ' + PORT)
 })
