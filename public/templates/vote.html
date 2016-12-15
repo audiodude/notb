@@ -12,7 +12,7 @@
       <div class="item" ng-class="{'selected': ctrl.isSelected(item)}"
            ng-click="ctrl.toggleSelection(item)"
            ng-repeat="item in ctrl.items">
-        {{item.name}}
+        {{item}}
       </div>
     </div>
   </md-content>
@@ -21,6 +21,6 @@
           ng-class="{'full': ctrl.selections.length == ctrl.maxSelections}">
       {{ctrl.selections.length}} / {{ctrl.maxSelections}} selected
     </span>
-    <md-button class="md-primary">Vote</md-button>
+    <md-button class="md-primary md-raised">Vote</md-button>
   </div>
 </div>

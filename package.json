@@ -24,7 +24,7 @@
     "grunt-contrib-sass": "^1.0.0",
     "grunt-ts": "^6.0.0-beta.3",
     "grunt-typings": "^0.1.5",
-    "redis": "^2.6.3",
+    "mongodb": "^2.2.16",
     "request": "^2.79.0",
     "typescript": "^2.0.10"
   }

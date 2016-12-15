@@ -6,12 +6,12 @@
       </h2>
     </div>
   </md-toolbar>
-  <div layout="column" layout-fill>
+  <div layout="column" layout-fill flex>
     <div class="admin-items-cont" layout="row" layout-align="center stretch"
          layout-padding flex="90">
       <textarea flex="80" ng-model="ctrl.editItems"></textarea>
     </div>
-    <div layout="row" layout-align="end center">
+    <div layout="row" layout-align="end center" flex>
       <div flex flex-offset="70"
            ng-class="{invisible: ctrl.saveSuccess == null}">
         <span ng-if="ctrl.saveSuccess">Saved!</span>

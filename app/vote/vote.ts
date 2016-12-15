@@ -1,30 +1,25 @@
-interface Item {
-  name: string;
-  id: string;
-}
-
 class VoteCtrl {
-  private items: Array<Item>;
+  private items: Array<string>;
   selections: Array<string> = [];
   maxSelections = 5;
   
   constructor(private VoteService: VoteService) {
-    this.VoteService.getItems().then((items: Array<Item>) => {
+    this.VoteService.getShuffledItems().then((items: Array<string>) => {
       this.items = items;
     });
   }
 
-  isSelected(item: Item) {
-    return this.selections.indexOf(item.id) != -1;
+  isSelected(item: string) {
+    return this.selections.indexOf(item) != -1;
   }
 
-  toggleSelection(item: Item) {
-    var idx = this.selections.indexOf(item.id)
+  toggleSelection(item: string) {
+    var idx = this.selections.indexOf(item)
     if (idx == -1) {
       if (this.selections.length >= this.maxSelections) {
         return;
       }
-      this.selections.push(item.id);
+      this.selections.push(item);
     } else {
       this.selections.splice(idx, 1);
     }
@@ -36,8 +31,33 @@ class VoteService {
 
   getItems() {
     return this.$http.get('/api/items').then((httpResp: any) => {
-      return <Array<Item>>httpResp.data.items;
+      return <Array<string>>httpResp.data.items;
     });
+  }
+
+  private shuffle(array: Array<any>) {
+    var currentIndex = array.length;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      var randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      var temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
+  getShuffledItems() {
+    return this.getItems().then((items: Array<string>) => {
+      return this.shuffle(items);
+    })
   }
 }
 

@@ -3,7 +3,6 @@ var gapi: any;
 class AdminCtrl {
   isAdmin: boolean = false;
   idToken: string = '';
-  items: Array<Item> = [];
   editItems: string = '';
   saveSuccess: boolean = null;
 
@@ -17,16 +16,9 @@ class AdminCtrl {
         this.AdminService.redirectUserByRole();
       }
     });
-    this.VoteService.getItems().then((items: Array<Item>) => {
-      this.editItems = this.getLineItems(items);
+    this.VoteService.getItems().then((items: Array<string>) => {
+      this.editItems = items.join('\n');
     });
-  }
-
-  getLineItems(items: Array<Item>): string {
-    var names = items.map(function(item: Item) {
-      return item.name;
-    });
-    return names.join('\n');
   }
 
   submitItems() {

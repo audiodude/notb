@@ -1,19 +1,18 @@
-var express = require('express')
-var app = express()
-var bodyParser = require('body-parser')
-var request = require('request');
-
-var redis = require("redis");
+var express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    request = require('request'),
+    assert = require('assert'),
+    MongoClient = require('mongodb').MongoClient;
 
 var PORT = process.env.PORT || 3000;
 
-if (process.env.REDIS_URL) {
-  client = redis.createClient(process.env.REDIS_URL);
-} else {
-  client = redis.createClient();
-}
-client.on("error", function (err) {
-  console.log("Error " + err);
+var mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/notb_dev'
+var db = null;
+MongoClient.connect(mongoUrl, function(err, _db) {
+  assert.equal(null, err);
+  db = _db;
+  console.log("Connected successfully to MongoDB server");
 });
 
 app.use(bodyParser.json());
@@ -40,46 +39,31 @@ app.post('/api/users/is_admin', function(req, res) {
 });
 
 app.get('/api/items', function(req, res) {
-  res.json({
-    items: [
-      {name: "Transcendence Machine", id: "0"},
-      {name: "Transcendence Device", id: "1"},
-      {name: "Hipster Sunrise", id: "2"},
-      {name: "That Feeling", id: "3"},
-      {name: "Money or War", id: "4"},
-      {name: "West Coast Birth", id: "5"},
-      {name: "Ground Rule Double", id: "6"},
-      {name: "Danger Third Rail", id: "7"},
-      {name: "Mr Moffit's Broken Television", id: "8"},
-      {name: "Broken Television", id: "9"},
-      {name: "Standwell", id: "10"},
-      {name: "Malfunctor", id: "11"},
-      {name: "Null Pointer Exception", id: "12"},
-      {name: "Phillip's Toy Car", id: "13"},
-      {name: "Broken Television Experiment", id: "14"},
-      {name: "Magenta Noise", id: "15"},
-      {name: "Noise Knows Best", id: "16"},
-      {name: "Like A Banana", id: "17"},
-      {name: "Like Us On Facebook", id: "18"},
-      {name: "Follow Me On Twitter", id: "19"},
-      {name: "NoneType", id: "20"},
-      {name: "Void of Thought", id: "21"},
-      {name: "Null and Void", id: "22"},
-      {name: "The Fine Print", id: "23"},
-      {name: "Ned, Who's A Surrealist", id: "24"},
-      {name: "Mediocritex", id: "25"},
-      {name: "Martin Dreams Of Music", id: "26"},
-      {name: "Heather Did It", id: "27"},
-      {name: "Silicon Volleyball", id: "28"},
-      {name: "Posted Placard", id: "29"}
-    ]
+  var itemsCollection = db.collection('items');
+  itemsCollection.find({}).toArray(function(err, docs) {
+    if (err != null) {
+      res.status(500).json({error: err});
+    } else {
+      res.json({items: docs[0].items})
+    }
   });
 });
 
 app.post('/api/items/all', function(req, res) {
   var parts = req.body.items.split('\n');
-  console.log(parts);
-  res.status(204).send();
+
+  var itemsCollection = db.collection('items');
+  itemsCollection.update({}, {
+    items: parts
+  }, {
+    upsert: true
+  }, function(err, result) {
+    if (err != null) {
+      res.status(500).json({error: err});
+    } else {
+      res.json({result: 'Inserted ' + parts.length + ' items'});
+    }
+  })
 });
 
 app.all('/*', function(req, res, next) {
