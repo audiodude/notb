@@ -21,6 +21,8 @@
           ng-class="{'full': ctrl.selections.length == ctrl.maxSelections}">
       {{ctrl.selections.length}} / {{ctrl.maxSelections}} selected
     </span>
-    <md-button class="md-primary md-raised">Vote</md-button>
+    <md-button class="md-primary md-raised" ng-click="ctrl.vote()">
+      Vote
+    </md-button>
   </div>
 </div>

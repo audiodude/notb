@@ -3,7 +3,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     request = require('request'),
     assert = require('assert'),
-    MongoClient = require('mongodb').MongoClient;
+    MongoClient = require('mongodb').MongoClient,
+    async = require('async');
 
 var PORT = process.env.PORT || 3000;
 
@@ -50,23 +51,79 @@ app.get('/api/items', function(req, res) {
 });
 
 app.post('/api/items/all', function(req, res) {
-  var parts = req.body.items.split('\n');
+  var items = req.body.items.split('\n');
 
   var itemsCollection = db.collection('items');
   itemsCollection.update({}, {
-    items: parts
+    items: items
   }, {
     upsert: true
   }, function(err, result) {
     if (err != null) {
       res.status(500).json({error: err});
-    } else {
-      res.json({result: 'Inserted ' + parts.length + ' items'});
     }
   })
+
+  var initVotes = function(item, callback) {
+    var q = {};
+    q[item] = {$exists: false};
+    var update = {}
+    update[item] = 0;
+    console.log(q);
+    votesCollection.update(q, {$set: update}, function(err, result) {
+      callback(err);
+    });
+  }
+  var sendResult = function(err) {
+    if (err != null) {
+      res.status(500).json({error: err});
+    } else {
+      res.json({result: 'Inserted ' + items.length + ' items'});
+    }
+  }
+
+  var votesCollection = db.collection('votes');
+  votesCollection.find({}).toArray(function(err, docs) {
+    if (err != null) {
+      res.status(500).json({error: err});
+    } else {
+      if (docs.length == 0) {
+        votesCollection.insert({}, function(err, result) {
+          if (err != null) {
+            res.status(500).json({error: err});
+          } else {
+            async.each(items, initVotes, sendResult);
+          }
+        });
+      } else {
+        async.each(items, initVotes, sendResult);
+      }
+    }
+  });
 });
 
-app.all('/*', function(req, res, next) {
+app.post('/api/vote', function(req, res) {
+  var votes = req.body.votes;
+
+  var updateObj = {}
+  votes.forEach(function(vote) {
+    updateObj[vote] = 1;
+  });
+
+  var votesCollection = db.collection('votes');
+  votesCollection.update({}, {
+    $inc: updateObj
+  }, function(err, result) {
+    if (err != null) {
+      res.status(500).json({error: err});
+    } else {
+      res.json({result: 'Updated ' + votes.length + ' items'});
+    }
+  });
+});
+
+// HTML5 routing of the app.
+app.get('/*', function(req, res, next) {
   res.sendFile('index.html', { root: 'public' });
 });
 

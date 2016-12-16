@@ -30,6 +30,7 @@ class AdminCtrl {
 
 class AdminService {
   private authPromise: ng.IPromise<null>;
+  idToken: string;
 
   constructor(private $http: ng.IHttpService,
               private $location: ng.ILocationService,
@@ -51,8 +52,9 @@ class AdminService {
 
   checkForAdmin() {
     return this.authPromise.then((authResponse: any) => {
+      this.idToken = authResponse.id_token;
       return this.$http.post('/api/users/is_admin', {
-        'idToken': authResponse.id_token
+        'idToken': this.idToken
       })
     }).then((httpResp: any) => {
       return <boolean>httpResp.data.isAdmin;

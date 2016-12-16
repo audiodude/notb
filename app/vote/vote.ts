@@ -3,7 +3,8 @@ class VoteCtrl {
   selections: Array<string> = [];
   maxSelections = 5;
   
-  constructor(private VoteService: VoteService) {
+  constructor(private $location: ng.ILocationService,
+    private VoteService: VoteService) {
     this.VoteService.getShuffledItems().then((items: Array<string>) => {
       this.items = items;
     });
@@ -24,10 +25,17 @@ class VoteCtrl {
       this.selections.splice(idx, 1);
     }
   }
+
+  vote() {
+    this.VoteService.vote(this.selections).then(() => {
+      this.$location.path('/results');
+    });
+  }
 }
 
 class VoteService {
-  constructor(private $http: ng.IHttpService) { }
+  constructor(private $http: ng.IHttpService,
+              private AdminService: AdminService) { }
 
   getItems() {
     return this.$http.get('/api/items').then((httpResp: any) => {
@@ -58,6 +66,13 @@ class VoteService {
     return this.getItems().then((items: Array<string>) => {
       return this.shuffle(items);
     })
+  }
+
+  vote(votes: Array<string>) {
+    return this.$http.post('/api/vote', {
+      'votes': votes,
+      'idToken': this.AdminService.idToken,
+    });
   }
 }
 

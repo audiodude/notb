@@ -15,6 +15,11 @@ angular.module('notb', ['ngMaterial', 'ngRoute', 'notb.index',
         controller: 'VoteCtrl',
         controllerAs: 'ctrl',
       })
+      .when('/results', {
+        templateUrl: 'templates/results.html',
+        controller: 'ResultCtrl',
+        controllerAs: 'ctrl',
+      })
       .when('/admin', {
         templateUrl: 'templates/admin.html',
         controller: 'AdminCtrl',

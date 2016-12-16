@@ -16,6 +16,7 @@
   "author": "Travis Briggs <audiodude@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.1.4",
     "body-parser": "^1.15.2",
     "bower": "^1.8.0",
     "express": "^4.14.0",

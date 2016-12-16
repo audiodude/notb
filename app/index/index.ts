@@ -14,6 +14,7 @@ class IndexCtrl {
   }
 
   onSignIn(googleUser: any) {
+    this.AdminService.idToken = googleUser.getAuthResponse().id_token;
     this.$rootScope.$apply(() => {
       this.$location.path('/vote');
     })
