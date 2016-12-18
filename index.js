@@ -4,7 +4,8 @@ var express = require('express'),
     request = require('request'),
     assert = require('assert'),
     MongoClient = require('mongodb').MongoClient,
-    async = require('async');
+    async = require('async'),
+    Q = require('q');
 
 var PORT = process.env.PORT || 3000;
 
@@ -27,7 +28,7 @@ if (process.env.NODE_ENV != 'production') {
 
 app.post('/api/users/is_admin', function(req, res) {
   var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + 
-      req.body.idToken
+      req.body.idToken;
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
@@ -45,7 +46,7 @@ app.get('/api/items', function(req, res) {
     if (err != null) {
       res.status(500).json({error: err});
     } else {
-      res.json({items: docs[0].items})
+      res.json({items: docs.length ? docs[0].items : []})
     }
   });
 });
@@ -69,7 +70,6 @@ app.post('/api/items/all', function(req, res) {
     q[item] = {$exists: false};
     var update = {}
     update[item] = 0;
-    console.log(q);
     votesCollection.update(q, {$set: update}, function(err, result) {
       callback(err);
     });
@@ -104,22 +104,46 @@ app.post('/api/items/all', function(req, res) {
 
 app.post('/api/vote', function(req, res) {
   var votes = req.body.votes;
+  var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + 
+      req.body.idToken;
 
-  var updateObj = {}
-  votes.forEach(function(vote) {
-    updateObj[vote] = 1;
-  });
+  var errorFn = function(err) {
+    console.log(err);
+    res.status(500).json({error: err});
+  };
 
-  var votesCollection = db.collection('votes');
-  votesCollection.update({}, {
-    $inc: updateObj
-  }, function(err, result) {
-    if (err != null) {
-      res.status(500).json({error: err});
-    } else {
-      res.json({result: 'Updated ' + votes.length + ' items'});
+  Q.nfcall(request, url).then(function(response) {
+    response = response[0];
+    if (response.statusCode != 200) {
+      Q.reject('Status code was ' + response.statusCode);
     }
-  });
+    return JSON.parse(response.body);
+  }, errorFn).then(function(user) {
+    var votesCollection = db.collection('votes');
+
+    var updateObj = {}
+    votes.forEach(function(vote) {
+      updateObj[vote] = 1;
+    });
+
+    return Q.ninvoke(votesCollection, 'update', {}, {
+      $inc: updateObj
+    }).then(function() {
+      return user;
+    }, errorFn);
+  }, errorFn).then(function(user) {
+    var usersCollection = db.collection('users');
+    return Q.ninvoke(usersCollection, 'update', {id: user['sub']}, {
+      $set: {
+        id: user['sub'],
+        email: user['email'],
+        votes: votes
+      }
+    }, {upsert: true})
+  }, errorFn).then(function() {
+    res.json({result: 'Updated ' + votes.length + ' items'});
+  }, errorFn);
+
 });
 
 // HTML5 routing of the app.

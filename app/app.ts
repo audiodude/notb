@@ -1,5 +1,5 @@
 angular.module('notb', ['ngMaterial', 'ngRoute', 'notb.index',
-                        'notb.vote', 'notb.admin'])
+                        'notb.vote', 'notb.admin', 'notb.results'])
   .config(function($routeProvider: ng.route.IRouteProvider,
                    $locationProvider: ng.ILocationProvider) {
     $locationProvider.html5Mode(true);
@@ -17,7 +17,7 @@ angular.module('notb', ['ngMaterial', 'ngRoute', 'notb.index',
       })
       .when('/results', {
         templateUrl: 'templates/results.html',
-        controller: 'ResultCtrl',
+        controller: 'ResultsCtrl',
         controllerAs: 'ctrl',
       })
       .when('/admin', {

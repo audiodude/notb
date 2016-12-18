@@ -3,7 +3,6 @@ var gapi: any;
 class IndexCtrl {
   constructor(private $location: ng.ILocationService,
               private $rootScope: ng.IRootScopeService,
-              private AdminService: AdminService,
               private IndexService: IndexService) {
     gapi.signin2.render('g-signin', {
       'scope': 'profile email',
@@ -14,7 +13,6 @@ class IndexCtrl {
   }
 
   onSignIn(googleUser: any) {
-    this.AdminService.idToken = googleUser.getAuthResponse().id_token;
     this.$rootScope.$apply(() => {
       this.$location.path('/vote');
     })
@@ -25,6 +23,6 @@ class IndexService {
 
 }
 
-angular.module('notb.index', ['notb.admin'])
+angular.module('notb.index', [])
   .service('IndexService', IndexService)
   .controller('IndexCtrl', IndexCtrl);

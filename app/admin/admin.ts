@@ -30,24 +30,38 @@ class AdminCtrl {
 
 class AdminService {
   private authPromise: ng.IPromise<null>;
-  idToken: string;
+  private idToken: string;
 
   constructor(private $http: ng.IHttpService,
               private $location: ng.ILocationService,
               private $q: ng.IQService) {
     var deferred = $q.defer();
     gapi.load('auth2', () => {
-      var auth2 = gapi.auth2.init({
-        client_id: ('514994321753-haa5mtf623hrkaiqaunsg9vh7mmaqchb' + 
-                    '.apps.googleusercontent.com'),
-        fetch_basic_profile: false,
-        scope: 'profile'
-      });
+      var auth2 = gapi.auth2.getAuthInstance();
+      if (!auth2) {
+        auth2 = gapi.auth2.init({
+          client_id: ('514994321753-haa5mtf623hrkaiqaunsg9vh7mmaqchb' + 
+                      '.apps.googleusercontent.com'),
+          fetch_basic_profile: false,
+          scope: 'profile'
+        });
+      }
       auth2.then(() => {
         deferred.resolve(auth2.currentUser.get().getAuthResponse());
       });
     });
     this.authPromise = deferred.promise;
+  }
+
+  getIdToken() {
+    if (this.idToken) {
+      return this.$q.when(this.idToken);
+    } else {
+      return this.authPromise.then((authResponse: any) => {
+        this.idToken = authResponse.id_token;
+        return this.idToken;
+      });
+    }
   }
 
   checkForAdmin() {

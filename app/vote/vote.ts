@@ -69,9 +69,11 @@ class VoteService {
   }
 
   vote(votes: Array<string>) {
-    return this.$http.post('/api/vote', {
-      'votes': votes,
-      'idToken': this.AdminService.idToken,
+    return this.AdminService.getIdToken().then((idToken: string) => {
+      return this.$http.post('/api/vote', {
+        'votes': votes,
+        'idToken': idToken,
+      });
     });
   }
 }
