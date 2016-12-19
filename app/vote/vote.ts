@@ -76,6 +76,18 @@ class VoteService {
       });
     });
   }
+
+  getUserSelections() {
+    return this.AdminService.getIdToken().then((idToken: string) => {
+      return this.$http.get('/api/user/votes', {
+        'params': {
+          'idToken': idToken,
+        },
+      }).then((httpResp: any) => {
+        return httpResp.data;
+      })
+    })
+  }
 }
 
 angular.module('notb.vote', [])

@@ -5,12 +5,17 @@ class ResultsCtrl {
   oneVotes: Array<string> = [];
   zeroVotes: Array<string> = [];
   multiVotes: Array<IRow> = [];
+  selections: Array<string> = [];
 
   constructor (private $rootScope: ng.IRootScopeService,
+               private VoteService: VoteService,
                private ResultsService: ResultsService) {
-    this.ResultsService.getResults().then((results) => {
-      this.results = results;
-      this.processResults();
+    this.VoteService.getUserSelections().then((selections) => {
+      this.selections = selections;
+      this.ResultsService.getResults().then((results) => {
+        this.results = results;
+        this.processResults();
+      });
     });
   }
 
@@ -60,6 +65,6 @@ class ResultsService {
   }
 }
 
-angular.module('notb.results', [])
+angular.module('notb.results', ['notb.vote'])
   .service('ResultsService', ResultsService)
   .controller('ResultsCtrl', ResultsCtrl);

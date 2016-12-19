@@ -115,7 +115,7 @@ app.post('/api/vote', function(req, res) {
   Q.nfcall(request, url).then(function(response) {
     response = response[0];
     if (response.statusCode != 200) {
-      Q.reject('Status code was ' + response.statusCode);
+      throw new Error('Status code was ' + response.statusCode);
     }
     return JSON.parse(response.body);
   }, errorFn).then(function(user) {
@@ -139,7 +139,7 @@ app.post('/api/vote', function(req, res) {
         email: user['email'],
         votes: votes
       }
-    }, {upsert: true})
+    }, {upsert: true});
   }, errorFn).then(function() {
     res.json({result: 'Updated ' + votes.length + ' items'});
   }, errorFn);
@@ -157,6 +157,34 @@ app.get('/api/results', function(req, res) {
       res.json(results);
     }
   });
+});
+
+app.get('/api/user/votes', function(req, res) {
+  var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + 
+      req.query.idToken;
+
+  var errorFn = function(err) {
+    console.log(err);
+    res.status(500).json({error: err});
+  };
+
+  Q.nfcall(request, url).then(function(response) {
+    response = response[0];
+    if (response.statusCode != 200) {
+      throw new Error('Status code was ' + response.statusCode);
+    }
+    return JSON.parse(response.body);
+  }, errorFn).then(function(user) {
+    var usersCollection = db.collection('users');
+    var finder = usersCollection.find({id: user['sub']});
+    return Q.ninvoke(finder, 'toArray');
+  }, errorFn).then(function(docs) {
+    if (docs.length == 1) {
+      res.json(docs[0].votes)
+    } else {
+      res.status(404).send();
+    }
+  }, errorFn);
 });
 
 // HTML5 routing of the app.

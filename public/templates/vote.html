@@ -1,4 +1,5 @@
-<div class="vote-cont" layout="column" layout-align="start center">
+<div ng-if="ctrl.items" 
+     class="vote-cont" layout="column" layout-align="start center">
   <md-toolbar class="md-hue-2" flex="5">
     <div class="md-toolbar-tools">
       <h2>
@@ -21,7 +22,9 @@
           ng-class="{'full': ctrl.selections.length == ctrl.maxSelections}">
       {{ctrl.selections.length}} / {{ctrl.maxSelections}} selected
     </span>
-    <md-button class="md-primary md-raised" ng-click="ctrl.vote()">
+    <md-button class="md-primary md-raised"
+               ng-disabled="ctrl.selections.length == 0"
+               ng-click="ctrl.vote()">
       Vote
     </md-button>
   </div>
