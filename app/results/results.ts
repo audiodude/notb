@@ -1,3 +1,5 @@
+var twttr: any;
+
 type IRow = [string, number];
 
 class ResultsCtrl {
@@ -6,8 +8,11 @@ class ResultsCtrl {
   zeroVotes: Array<string> = [];
   multiVotes: Array<IRow> = [];
   selections: Array<string> = [];
+  twitterPromise: ng.IPromise<null>;
+  twitterLoaded: boolean = false;
 
-  constructor (private $rootScope: ng.IRootScopeService,
+  constructor (private $q: ng.IQService,
+               private $rootScope: ng.IRootScopeService,
                private VoteService: VoteService,
                private ResultsService: ResultsService) {
     this.VoteService.getUserSelections().then((selections) => {
@@ -17,6 +22,12 @@ class ResultsCtrl {
         this.processResults();
       });
     });
+
+    var deferred = this.$q.defer();
+    twttr.ready(function() {
+      deferred.resolve();
+    });
+    this.twitterPromise = deferred.promise;
   }
 
   medianVotes() {
@@ -52,6 +63,16 @@ class ResultsCtrl {
         this.multiVotes.push(row);
       }
     });
+  }
+
+  loadTwitter() {
+    if (this.twitterLoaded) {
+      return;
+    }
+    this.twitterPromise.then(() => {
+      twttr.widgets.load();
+      this.twitterLoaded = true;
+    })
   }
 }
 

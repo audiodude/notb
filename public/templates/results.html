@@ -33,6 +33,12 @@
            ng-class="{'chosen': ctrl.selections.indexOf(item) != -1}">
         {{item}}
       </div>
-    </div>    
+    </div>
+    <div class="tweet">
+      Get your friends to vote!
+      <a data-size="large" class="twitter-share-button" href="https://twitter.com/intent/tweet?text=I%20just%20voted%20on%20band%20names&url=http%3A%2F%2Fnamemybandfor.me&via=audiodude">
+        Tweet
+      </a>
+      {{ctrl.loadTwitter()}}
   </md-content>
 </div>
