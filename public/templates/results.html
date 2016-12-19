@@ -8,7 +8,7 @@
     </div>
   </md-toolbar>
   <md-content flex>
-    <table class="multi-vote-table">
+    <table ng-if="ctrl.multiVotes.length > 0" class="multi-vote-table">
       <tr>
         <th class="name-col">Name</th>
         <th class="vote-col">Votes</th>
