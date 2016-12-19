@@ -146,6 +146,19 @@ app.post('/api/vote', function(req, res) {
 
 });
 
+app.get('/api/results', function(req, res) {
+  var votesCollection = db.collection('votes');
+  votesCollection.find({}).toArray(function(err, docs) {
+    if (err != null) {
+      res.status(500).json({error: err});
+    } else {
+      var results = docs.length ? docs[0] : {};
+      delete results['_id'];
+      res.json(results);
+    }
+  });
+});
+
 // HTML5 routing of the app.
 app.get('/*', function(req, res, next) {
   res.sendFile('index.html', { root: 'public' });

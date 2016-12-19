@@ -31,12 +31,27 @@ body {
   max-width: 640px!important;
 }
 
+.results-cont {
+  height: 100%;
+  margin: auto;
+  min-height: 100%;
+  max-width: 1000px!important;
+}
+
 .item {
   border: 2px solid #e4e4e4;
   border-radius: 10px;
   cursor: pointer;
   margin: 0 8px 4px;
+  max-height: 1em;
   padding: 4px;
+}
+
+.item-sm {
+  border-radius: 6px;
+  font-size: 12px;
+  margin: 0 4px 2px;
+  padding: 2px;
 }
 
 .item:focus {
@@ -57,4 +72,34 @@ body {
 
 .admin-items-cont {
   width: 800px;
+}
+
+.multi-vote-table {
+  border-collapse: collapse;
+  line-height: 1.4em;
+  margin: auto;
+  max-width: 990px;
+  width: 100%;
+}
+
+.multi-vote-table tr:nth-of-type(odd) {
+  background: #cecefa;
+}
+
+.multi-vote-table
+
+.chosen {
+  font-weight: bold;
+}
+
+.name-col {
+  width: 70%;
+}
+
+td.name {
+  text-align: right;
+}
+
+td.votes {
+  text-align: center;
 }

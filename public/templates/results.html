@@ -1,1 +1,28 @@
-<h1>Results coming soon!</h1>
+<div class="results-cont" layout="column" layout-align="start center">
+  <md-toolbar class="md-hue-2" flex="5">
+    <div class="md-toolbar-tools">
+      <h2>
+        <span>Results</span>
+      </h2>
+    </div>
+  </md-toolbar>
+  <md-content flex>
+    <table class="multi-vote-table">
+      <tr>
+        <th class="name-col">Name</th>
+        <th class="vote-col">Votes</th>
+      </tr>
+      <tr ng-repeat="item in ctrl.multiVotes">
+        <td class="name">{{item[0]}}</td><td class="votes">{{item[1]}}</td>
+      </tr>
+    </table>
+    <h3>The following names got 1 vote</h3>
+    <div layout="row" layout-align="start start" layout-wrap>
+      <div class="item item-sm" ng-repeat="item in ctrl.oneVotes">{{item}}</div>
+    </div>
+    <h3>These ones still have no votes</h3>
+    <div layout="row" layout-align="start start" layout-wrap>
+      <div class="item item-sm" ng-repeat="item in ctrl.zeroVotes">{{item}}</div>
+    </div>    
+  </md-content>
+</div>

@@ -1,7 +1,7 @@
 class VoteCtrl {
   private items: Array<string>;
   selections: Array<string> = [];
-  maxSelections = 5;
+  maxSelections = 10;
   
   constructor(private $location: ng.ILocationService,
     private VoteService: VoteService) {
