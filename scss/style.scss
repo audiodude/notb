@@ -54,6 +54,13 @@ body {
   padding: 2px;
 }
 
+.item-md {
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0 4px 2px;
+  padding: 3px;
+}
+
 .item:focus {
   outline: none;
 }

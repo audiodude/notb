@@ -4,6 +4,7 @@ type IRow = [string, number];
 
 class ResultsCtrl {
   results: Array<any>;
+  twoVotes: Array<string> = [];
   oneVotes: Array<string> = [];
   zeroVotes: Array<string> = [];
   multiVotes: Array<IRow> = [];
@@ -59,6 +60,8 @@ class ResultsCtrl {
         this.zeroVotes.push(row[0]);
       } else if (row[1] == 1) {
         this.oneVotes.push(row[0]);
+      } else if (row[1] == 2) {
+        this.twoVotes.push(row[0]);
       } else {
         this.multiVotes.push(row);
       }
