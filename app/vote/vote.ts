@@ -5,8 +5,14 @@ class VoteCtrl {
   
   constructor(private $location: ng.ILocationService,
     private VoteService: VoteService) {
-    this.VoteService.getShuffledItems().then((items: Array<string>) => {
-      this.items = items;
+    this.VoteService.getUserSelections().then((selections: Array<string>) => {
+      if (selections) {
+        this.$location.path('/results');
+      } else {
+        this.VoteService.getShuffledItems().then((items: Array<string>) => {
+          this.items = items;
+        });
+      }
     });
   }
 
