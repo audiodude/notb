@@ -182,7 +182,7 @@ app.get('/api/user/votes', function(req, res) {
     if (docs.length == 1) {
       res.json(docs[0].votes)
     } else {
-      res.status(404).send();
+      res.json([]);
     }
   }, errorFn);
 });
