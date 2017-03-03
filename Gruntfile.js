@@ -3,6 +3,9 @@ module.exports = function(grunt) {
     ts: {
       default: {
         tsconfig: true
+      },
+      options: {
+        compiler: './node_modules/typescript/bin/tsc'
       }
     },
     sass: {
