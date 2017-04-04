@@ -9,7 +9,7 @@ var express = require('express'),
 
 var PORT = process.env.PORT || 3000;
 
-var mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/notb_dev'
+var mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/notb_dev'
 var db = null;
 MongoClient.connect(mongoUrl, function(err, _db) {
   assert.equal(null, err);
