@@ -21,8 +21,9 @@
         <td class="votes">{{item[1]}}</td>
       </tr>
     </table>
-    <h3>The following names have 2 votes</h3>
-    <div layout="row" layout-align="start start" layout-wrap>
+    <h3 ng-if="ctrl.twoVotes.length > 0">The following names have 2 votes</h3>
+    <div ng-if="ctr.twoVotes.length > 0" layout="row" layout-align="start start"
+         layout-wrap>
       <div class="item item-md" ng-repeat="item in ctrl.twoVotes"
            ng-class="{'chosen': ctrl.selections.indexOf(item) != -1}">
         {{item}}</div>
